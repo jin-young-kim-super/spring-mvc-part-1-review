@@ -1,0 +1,6 @@
+request = org.apache.catalina.connector.RequestFacade@3d2b4829
+response = org.apache.catalina.connector.ResponseFacade@36f65164
+ → RequestFacade, ResponseFacade는 서블릿의 HttpSevletRequest, HttpServletResponse 인터페이스의 톰캣 구현체이다!
+톰캣 말고도 여러 서블릿 컨테이너를 지원하는 WAS가 있다. 각 WAS 마다 위 인터페이스의 구현체다 다르다. 
+
+  
