@@ -1,0 +1,33 @@
+application/json 스펙 : charsetEncoding이 utf-8 형식으로 고정돼 있다. 
+고로, "Content-Type : application/json;utf-8"과 같이 추가 파라미터를 하면 안 된다.왜냐하면 의미가 없는 추가 파라미터이기 때문이다.
+
+그러나 서블릿에서 response.getWriter()을 사용하면 response.setCharacterEncoding("utf-8") 이 코드에 의해서 Content-Type에 자동으로 추가 파라미터를 추가해버린다고 한다. 
+-> 이 문제는 response.getWriter() 대신에 response.getOutputStream()으로 해결 가능하다고 하는데, 강사 왈 그냥 참고만 해라고 한다. 
+
+수정 예시
+@WebServlet(name = "responseJsonServlet", urlPatterns = "/response-json")
+public class ResponseJsonServlet extends HttpServlet {
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+    @Override
+    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        response.setContentType("application/json");
+
+        HelloData helloData = new HelloData();
+        helloData.setUsername("kim");
+        helloData.setAge(20);
+
+        String result = objectMapper.writeValueAsString(helloData);
+        
+        // 파라미터 추가 없음	
+        ServletOutputStream outputStream = response.getOutputStream();
+        // 서버에서 애초에 JSON 문자열을 UTF-8 바이트 배열로 변환해서 반환!	
+        outputStream.write(result.getBytes(StandardCharsets.UTF_8));
+    }
+}
+
+
+
+
